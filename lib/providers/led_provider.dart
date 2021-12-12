@@ -4,8 +4,9 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
 class LedProvider with ChangeNotifier {
-  int colCount = 9 * 8;
-  int rowCount = 16;
+  int colCount = 16;
+  int rowCount = 8;
+  int currentIndex = 0;
   Color pickerColor = Colors.red;
   List<LedInfos> ledInfos = [];
   LedProvider() {
@@ -14,13 +15,12 @@ class LedProvider with ChangeNotifier {
 
   initLedInfos() {
     ledInfos = [];
-    for (int i = 0; i < colCount * rowCount; i++) {
-      ledInfos.add(LedInfos(i));
+    for (int y = 0; y < rowCount; y++) {
+      for (int x = 0; x < colCount; x++) {
+        ledInfos.add(LedInfos(-1, x, y));
+        //print('x:$x y:$y');
+      }
     }
-  }
-
-  LedInfos getLedInfos(int index) {
-    return ledInfos[index - 1];
   }
 
   setPickerColor(Color color) {
@@ -29,7 +29,7 @@ class LedProvider with ChangeNotifier {
   }
 
   setColor(int index, Color color) {
-    getLedInfos(index).color = color;
+    ledInfos[index].color = color;
     notifyListeners();
   }
 
@@ -48,12 +48,14 @@ class LedProvider with ChangeNotifier {
     String ledInfosStr = '[';
     bool first = true;
     for (var element in ledInfos) {
-      if (!first) {
-        ledInfosStr += ',';
-      } else {
-        first = false;
+      if (element.numero != -1) {
+        if (!first) {
+          ledInfosStr += ',';
+        } else {
+          first = false;
+        }
+        ledInfosStr += element.toJson().toString();
       }
-      ledInfosStr += element.toJson().toString();
     }
     ledInfosStr += ']';
     print(ledInfosStr);

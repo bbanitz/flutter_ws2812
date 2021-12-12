@@ -10,18 +10,19 @@ class Led extends StatelessWidget {
   //LedView({index:this.index};)
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      height: 20,
-      width: 20,
-      child: InkWell(
-        onTap: () {
-          Provider.of<LedProvider>(context, listen: false).setColor(index,
-              Provider.of<LedProvider>(context, listen: false).pickerColor);
-        },
+    if (Provider.of<LedProvider>(context).ledInfos[index].numero! > -1) {
+      return Container(
+        color: Colors.black,
+        height: 20,
+        width: 20,
         child: LedWidget(
-            color: Provider.of<LedProvider>(context).getLedInfos(index).color),
-      ),
-    );
+            color: Provider.of<LedProvider>(context).ledInfos[index].color),
+      );
+    } else {
+      return Container(
+        width: 20,
+        height: 20,
+      );
+    }
   }
 }

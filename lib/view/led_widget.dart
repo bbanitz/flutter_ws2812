@@ -4,14 +4,17 @@ import 'package:provider/provider.dart';
 
 class OpenPainter extends CustomPainter {
   Color color = Colors.black;
-  OpenPainter(this.color);
+  BoxConstraints constrain;
+  OpenPainter(this.color, this.constrain);
   @override
   void paint(Canvas canvas, Size size) {
     var paint1 = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
     //a circle
-    canvas.drawCircle(Offset(10, 10), 10, paint1);
+
+    canvas.drawCircle(Offset(constrain.maxWidth / 2, constrain.maxHeight / 2),
+        constrain.maxWidth / 2, paint1);
   }
 
   @override
@@ -23,12 +26,10 @@ class LedWidget extends StatelessWidget {
   Color color = Colors.black;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 20,
-      height: 20,
-      child: CustomPaint(
-        painter: OpenPainter(color),
-      ),
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constrain) {
+        return CustomPaint(painter: OpenPainter(color, constrain));
+      },
     );
   }
 }

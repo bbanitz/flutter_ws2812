@@ -7,6 +7,8 @@ import 'model/led_infos.dart';
 import 'providers/led_provider.dart';
 import 'package:flutter_hsvcolor_picker/flutter_hsvcolor_picker.dart';
 
+import 'view/led_array.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -43,18 +45,7 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -65,45 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
   bool picker = false;
   void changeColor(Color color) {
     Provider.of<LedProvider>(context, listen: false).setPickerColor(color);
-  }
-
-  Widget ledBuilder(int index) {
-    return Card(
-      color: Provider.of<LedProvider>(context).ledInfos[index - 1].color,
-      margin: const EdgeInsets.all(1),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      //onPressed: () {},
-      child: Container(
-        color: Provider.of<LedProvider>(context).ledInfos[index - 1].color,
-        width: 20,
-        child: Center(
-          child: Led(index: index),
-        ),
-      ),
-    );
-  }
-
-  Widget rowBuilder(int base) {
-    List<Widget> elements = [];
-    for (int i = 1; i <= Provider.of<LedProvider>(context).colCount; i++) {
-      elements.add(Expanded(
-          child: Center(
-              child: ledBuilder(
-                  i + base * Provider.of<LedProvider>(context).colCount))));
-    }
-    return Row(
-      children: elements,
-    );
-  }
-
-  Widget colBuilder() {
-    List<Widget> elements = [];
-    for (int i = 0; i < Provider.of<LedProvider>(context).rowCount; i++) {
-      elements.add(rowBuilder(i));
-    }
-    return Column(children: elements);
   }
 
   @override
@@ -127,9 +79,10 @@ class _MyHomePageState extends State<MyHomePage> {
         height: double.infinity,
         width: double.infinity,
         child: Column(children: [
+          const SizedBox(height: 35),
           Stack(
             children: [
-              colBuilder(),
+              const LedArray(),
               if (picker)
                 Container(
                   color: Colors.white,

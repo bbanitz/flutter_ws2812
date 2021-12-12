@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class LedInfos {
-  LedInfos(this.numero);
+  LedInfos(this.numero, this.posX, this.posY);
   int? numero;
   int? posX;
   int? posY;
